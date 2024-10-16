@@ -35,6 +35,8 @@
  * Good luck, and may your code be bug-free!
  */
 
+//Ian Haworth
+//Web Dev Midterm
 const express = require('express');
 const path = require('path');
 const app = express();
@@ -60,96 +62,80 @@ app.get('/', (req, res) => {
 // Description: Get all items (books)
 // Task: Implement logic to return the full list of books
 app.get('/api/items', (req, res) => {
-  // TODO: Add logic to return all books
-
-  // ***************************************************************
-  // ***************************************************************
-  // ***************  Implement your code here  ********************
-  // ***************************************************************
-  // ***************************************************************
-
-  // Don't forget to remove the line below:
-  res.status(501).send('Not Implemented');
+  //First Request
+  res.json(books);
 });
 
 // GET /api/items?title=[<<partial title name>>]
 // Description: Search for books by partial title match
 // Task: Implement logic to return books matching the partial title
 app.get('/api/items/search', (req, res) => {
-  // TODO: Add logic to search for books by title (use partial matching)
-  
-  // ***************************************************************
-  // ***************************************************************
-  // ***************  Implement your code here  ********************
-  // ***************************************************************
-  // ***************************************************************
-
-  // Don't forget to remove the line below:
-  res.status(501).send('Not Implemented');
+  //Second Request
+  const searchTerm = req.query.title.toLowerCase();
+  const matchingBooks = books.filter(book => book.toLowerCase().includes(searchTerm));
+  res.json(matchingBooks);
 });
 
 // GET /api/items/:id
 // Description: Get a specific item by ID
 // Task: Implement logic to return a book by its index (ID)
 app.get('/api/items/:id', (req, res) => {
-  // TODO: Add logic to return a book by its index (ID)
-  
-  // ***************************************************************
-  // ***************************************************************
-  // ***************  Implement your code here  ********************
-  // ***************************************************************
-  // ***************************************************************
-
-  // Don't forget to remove the line below:
-  res.status(501).send('Not Implemented');
+  //3rd Request
+  const id = req.params.id;
+  const book = books[id];
+  if (book) {
+    res.json(book);
+  } else {
+    res.status(404).send('Book not found');
+  }
 });
 
 // POST /api/items
 // Description: Add a new item
 // Task: Implement logic to add a new book to the array
 app.post('/api/items', (req, res) => {
-  // TODO: Add logic to add a new book to the array
-  
-  // ***************************************************************
-  // ***************************************************************
-  // ***************  Implement your code here  ********************
-  // ***************************************************************
-  // ***************************************************************
-
-  // Don't forget to remove the line below:
-  res.status(501).send('Not Implemented');
+  //4th Request
+  const newBook = req.query.title;
+  if (newBook) {
+    books.push(newBook);
+    res.status(201).json(newBook);
+  } else {
+    res.status(400).send('Title is required');
+  }
 });
 
 // PUT /api/items/:id
 // Description: Update an item by ID
 // Task: Implement logic to update a book by its index (ID)
 app.put('/api/items/:id', (req, res) => {
-  // TODO: Add logic to update a book by its index
-  
-  // ***************************************************************
-  // ***************************************************************
-  // ***************  Implement your code here  ********************
-  // ***************************************************************
-  // ***************************************************************
+  //5th Request
+  const id = req.params.id;
+  const newTitle = req.query.title;
+  if (books[id]) {
+    if (newTitle) {
+      books[id] = newTitle;
+      res.json(books[id]);
+    } else {
+      res.status(400).send('Title is required');
+    }
+  } else {
+    res.status(404).send('Book not found');
+  }
 
-  // Don't forget to remove the line below:
-  res.status(501).send('Not Implemented');
 });
 
 // DELETE /api/items/:id
 // Description: Remove an item by ID
 // Task: Implement logic to remove a book by its index (ID)
 app.delete('/api/items/:id', (req, res) => {
-  // TODO: Add logic to remove a book by its index
-  
-  // ***************************************************************
-  // ***************************************************************
-  // ***************  Implement your code here  ********************
-  // ***************************************************************
-  // ***************************************************************
-
-  // Don't forget to remove the line below:
-  res.status(501).send('Not Implemented');
+  //6th Request
+  const id = req.params.id;
+  if (books[id]) {
+    const deletedBook = books.splice(id, 1);
+    res.json(deletedBook);
+  } else {
+    res.status(404).send('Book not found');
+  }
 });
 
 // Start the server
